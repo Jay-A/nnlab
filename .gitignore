@@ -1,0 +1,145 @@
+# ============================================================
+# Python
+# ============================================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+*.so
+*.dll
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.prof
+.profiler/
+
+# Type checking / linting caches
+.mypy_cache/
+.ruff_cache/
+.pyright/
+
+# ============================================================
+# Jupyter
+# ============================================================
+
+**/.ipynb_checkpoints/
+
+# Jupyter temporary files
+*.nbconvert.ipynb
+*.executed.ipynb
+
+# ============================================================
+# Documentation
+# ============================================================
+
+# Sphinx
+docs/build/
+docs/source/_build/
+docs/source/_static/generated/
+
+# Doxygen
+docs/doxygen/html/
+docs/doxygen/latex/
+
+# Generated documentation artifacts
+*.aux
+*.log
+*.out
+*.toc
+
+# ============================================================
+# Generated experiment output
+# ============================================================
+
+# Experiment results
+results/
+experiments/output/
+runs/
+
+# Generated figures
+# Keep documentation images tracked
+generated_images/
+
+# Scientific data
+*.csv
+*.h5
+*.hdf5
+*.npy
+*.npz
+*.mat
+
+# Large model files
+*.pt
+*.pth
+*.onnx
+*.ckpt
+*.weights
+
+*.pickle
+*.pkl
+*.joblib
+
+# ============================================================
+# Build / temporary files
+# ============================================================
+
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# ============================================================
+# IDEs
+# ============================================================
+
+.vscode/
+.idea/
+
+# ============================================================
+# Operating systems
+# ============================================================
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# Linux
+.directory
+
+# ============================================================
+# Environment files
+# ============================================================
+
+.env
+.env.*
+.venv*/
+!.env.example
+*.whl
+
+# ============================================================
+# Local configuration
+# ============================================================
+
+config.local.py

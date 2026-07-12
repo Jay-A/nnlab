@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "nnlab"
+version = "0.1.0"
+description = "A modular framework for experimenting with neural network architectures, transition kernels, and optimization strategies."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+
+authors = [
+    { name = "Jay M. Appleton" }
+]
+
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.12",
+    "matplotlib>=3.8",
+    "pandas>=2.0",
+]
+
+
+[project.optional-dependencies]
+
+dev = [
+    "pytest>=8.0",
+    "pytest-cov",
+    "ruff",
+    "mypy",
+    "pre-commit",
+]
+
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
+    "sphinx-autodoc-typehints",
+    "nbsphinx",
+    "jupyter",
+]
+
+notebooks = [
+    "jupyter",
+    "ipykernel",
+]
+
+
+[project.urls]
+Homepage = "https://github.com/Jay-A/nnlab"
+Documentation = "https://Jay-A.github.io/nnlab/"
+Repository = "https://github.com/Jay-A/nnlab"
+
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nnlab*"]
+
+
+# ------------------------------------------------------------
+# Testing
+# ------------------------------------------------------------
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests"
+]
+
+
+# ------------------------------------------------------------
+# Formatting / linting
+# ------------------------------------------------------------
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
