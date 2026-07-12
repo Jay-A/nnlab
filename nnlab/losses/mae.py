@@ -3,19 +3,19 @@ import numpy as np
 from .base import Loss
 
 
-class MeanSquaredError(Loss):
+class MeanAbsoluteError(Loss):
     """
-    Mean squared error (MSE) loss.
+    Mean absolute error (MAE) loss.
 
-    The mean squared error measures the average squared difference
-    between model predictions and target values.
+    The mean absolute error measures the average absolute
+    difference between model predictions and target values.
 
     Definition:
 
-        L = mean((prediction - target)^2)
+        L = mean(abs(prediction - target))
 
-    The MSE is smooth, differentiable everywhere, and penalizes
-    large errors more heavily than small errors.
+    The MAE is less sensitive to outliers than the mean
+    squared error but is not differentiable at zero.
     """
 
     def forward(
@@ -24,7 +24,7 @@ class MeanSquaredError(Loss):
         target: np.ndarray,
     ) -> float:
         """
-        Compute the mean squared error.
+        Compute the mean absolute error.
 
         Parameters
         ----------
@@ -37,12 +37,12 @@ class MeanSquaredError(Loss):
         Returns
         -------
         float
-            Mean squared error.
+            Mean absolute error.
         """
 
         error = prediction - target
 
-        return float(np.mean(error**2))
+        return float(np.mean(np.abs(error)))
 
     def derivative(
         self,
@@ -50,7 +50,7 @@ class MeanSquaredError(Loss):
         target: np.ndarray,
     ) -> np.ndarray:
         """
-        Compute the derivative of the mean squared error
+        Compute the derivative of the mean absolute error
         with respect to the predictions.
 
         Parameters
@@ -64,9 +64,9 @@ class MeanSquaredError(Loss):
         Returns
         -------
         np.ndarray
-            Gradient of the loss.
+            Subgradient of the loss.
         """
 
         n = prediction.size
 
-        return (2.0 / n) * (prediction - target)
+        return np.sign(prediction - target) / n
