@@ -1,16 +1,32 @@
 # nnlab
 
-## Neural Network Laboratory for Experimental Learning Systems
+## Neural Network Lab for Experimental Learning Systems
 
 ---
 
 ## Overview
 
-`nnlab` is a modular framework for experimenting with neural network architectures, activation functions, optimization strategies, and learning dynamics.
+So many conversations about Machine Learning (ML), and Neural Networks (NN) in
+general, quickly become focused on the idea of the "AI black box" — systems
+that appear almost magical because of the complexity hidden inside them.
 
-The goal of the project is to provide an environment for studying how neural networks learn through reproducible experiments, interactive visualizations, and configurable computational models.
+That perspective misses something important: while we may not be able to
+analytically describe every internal behavior of a modern neural network, we
+can still study how these systems work by understanding and isolating their
+individual components.
 
-Rather than focusing only on training performance, `nnlab` emphasizes understanding the relationship between:
+`nnlab` is built around the idea that neural networks are not mysterious
+monolithic systems, but collections of interacting parts. By separating and
+experimenting with those parts, we can observe how small changes in one
+component influence the behavior of the complete learning system.
+
+The goal of this project is not to compete with large-scale machine learning
+frameworks or optimize only for benchmark performance. Instead, `nnlab`
+provides a computational lab.oratory for exploring the fundamentals of neural
+network behavior through controlled experiments, configurable components, and
+visual analysis.
+
+The framework focuses on studying the relationships between:
 
 - model architecture,
 - activation function behavior,
@@ -18,13 +34,53 @@ Rather than focusing only on training performance, `nnlab` emphasizes understand
 - data representation,
 - and learning outcomes.
 
-The initial focus is on function approximation and regression problems, with future extensions toward classification, convolutional models, recurrent architectures, and other neural network approaches.
+By making these components easier to isolate and modify, `nnlab` aims to make
+neural network experimentation more transparent, reproducible, and accessible.
+
+The initial focus is on function approximation and regression problems, with
+future extensions toward classification, convolutional models, recurrent
+architectures, and other neural network approaches.
+
+---
+
+## Motivation
+
+Many machine learning frameworks are designed around a workflow like:
+```text
+define model → train model → evaluate performance
+```
+
+This is an extremely effective approach for building useful systems, but it
+can make it difficult to explore the underlying behavior of the individual
+components that make those systems work.
+
+`nnlab` takes a more experimental approach:
+```text
+define component → modify behavior → observe effects → understand interactions
+```
+
+The purpose is to create a space where neural networks can be studied as
+systems of interacting mathematical components.
+
+Questions that motivate the project include:
+
+- How does the shape of an activation function influence learning behavior?
+- How do different parameterizations affect optimization?
+- How do architectural choices change representation and generalization?
+- How do optimization strategies interact with the structure of a model?
+
+Rather than treating neural networks only as tools for producing predictions,
+`nnlab` treats them as objects of study.
+
+The goal is to provide a framework where experiments are small enough to
+understand, controlled enough to reproduce, and flexible enough to reveal how
+the pieces of a learning system influence one another.
 
 ---
 
 ## Project Goals
 
-`nnlab` is designed around the idea of a **computational laboratory** for neural networks.
+`nnlab` is designed around the idea of a **computational lab.oratory** for neural networks.
 
 Key goals:
 
@@ -39,31 +95,54 @@ Key goals:
 
 ## Transition Kernel Framework
 
-A central idea of `nnlab` is the use of parameterized transition kernels as activation function building blocks.
+A central idea of `nnlab` is the use of parameterized transition kernels as
+activation function building blocks.
 
-Instead of treating activations as isolated functions, `nnlab` studies families of functions of the form:
+Rather than treating activation functions as isolated formulas, `nnlab`
+separates the mathematical shape of an activation from its configurable
+parameters.
 
-\[
-\phi(x)=a\,K\left(\frac{x-c}{w}\right)+b
-\]
+A parameterized activation is defined as:
+
+$$
+\phi(x)=aK\left(\frac{x-c}{w}\right)+b
+$$
 
 where:
 
-- \(K\) is a transition kernel,
+- \(K\) is a transition kernel defining the underlying mathematical shape,
 - \(c\) controls the activation center,
-- \(w\) controls transition width,
+- \(w\) controls the transition width,
 - \(a\) controls output scaling,
 - \(b\) controls output offset.
 
-Initial kernel families include:
+This allows activation behavior to be adjusted continuously without creating
+separate activation classes for every variation.
 
-- Logistic
-- Gaussian
-- Cauchy
-- Polynomial
-- Piecewise Linear
+Current transition kernel families include:
 
-This framework allows systematic comparison of activation shapes and their effects on learning behavior.
+- **Logistic**  
+  Smooth bounded sigmoid transition. Useful as a general-purpose activation
+  shape and a baseline for comparison.
+
+- **Arctangent**  
+  Smooth sigmoid-like transition with heavier tails than logistic behavior.
+
+- **Gaussian CDF**  
+  Smooth cumulative transition derived from the normal distribution.
+
+- **Gaussian RBF**  
+  Localized radial response useful for basis-function style activations and
+  localized feature responses.
+
+- **Piecewise Linear**  
+  Simple controllable transition useful for approximating ReLU-like behavior.
+
+- **Polynomial**  
+  Flexible algebraic transition families for exploring non-sigmoidal behavior.
+
+This framework enables systematic comparison of activation shapes, parameter
+effects, and learning dynamics.
 
 ---
 
