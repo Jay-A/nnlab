@@ -96,3 +96,75 @@ def test_feedforward_applies_layers_in_order():
         y,
         np.array([[4.0]]),
     )
+
+
+def test_feedforward_backward_propagates_gradients():
+    """
+    Verify model propagates gradients through layers in reverse order.
+    """
+
+    layer1 = Dense(
+        input_size=2,
+        output_size=2,
+    )
+
+    layer2 = Dense(
+        input_size=2,
+        output_size=1,
+    )
+
+    layer1.weights = np.array(
+        [
+            [1.0, 1.0],
+            [1.0, -1.0],
+        ]
+    )
+
+    layer1.bias = np.array(
+        [0.0, 0.0],
+    )
+
+    layer2.weights = np.array(
+        [
+            [1.0],
+            [1.0],
+        ]
+    )
+
+    layer2.bias = np.array(
+        [0.0],
+    )
+
+    model = FeedForward(
+        layers=[
+            layer1,
+            layer2,
+        ]
+    )
+
+    x = np.array(
+        [
+            [2.0, 3.0],
+        ]
+    )
+
+    prediction = model.forward(
+        x,
+    )
+
+    gradient = np.ones_like(
+        prediction,
+    )
+
+    input_gradient = model.backward(
+        gradient,
+    )
+
+    assert np.allclose(
+        input_gradient,
+        np.array(
+            [
+                [2.0, 0.0],
+            ]
+        ),
+    )

@@ -1,7 +1,7 @@
 import numpy as np
 
-from .base import Model
 from ..layers import Layer
+from .base import Model
 
 
 class FeedForward(Model):
@@ -13,6 +13,11 @@ class FeedForward(Model):
 
         x -> layer1 -> layer2 -> ... -> output
 
+    During the backward pass, gradients are propagated
+    through the same layers in reverse order:
+
+        gradient -> layerN -> ... -> layer2 -> layer1
+
     Parameters
     ----------
     layers : list[Layer]
@@ -23,6 +28,15 @@ class FeedForward(Model):
         self,
         layers: list[Layer],
     ):
+        """
+        Initialize feed-forward model.
+
+        Parameters
+        ----------
+        layers : list[Layer]
+            Ordered list of layers composing the model.
+        """
+
         self.layers = layers
 
     def forward(
@@ -47,3 +61,31 @@ class FeedForward(Model):
             x = layer.forward(x)
 
         return x
+
+    def backward(
+        self,
+        gradient: np.ndarray,
+    ) -> np.ndarray:
+        """
+        Compute model backward pass.
+
+        Gradients are propagated through layers in reverse
+        order using the chain rule.
+
+        Parameters
+        ----------
+        gradient : np.ndarray
+            Gradient of loss with respect to model output.
+
+        Returns
+        -------
+        np.ndarray
+            Gradient of loss with respect to model input.
+        """
+
+        for layer in reversed(self.layers):
+            gradient = layer.backward(
+                gradient,
+            )
+
+        return gradient

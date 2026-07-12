@@ -11,14 +11,14 @@ class ParameterizedActivation(Activation):
 
     The activation is defined as:
 
-        phi(x) = a * K((x - c) / w) + b
+        phi(x) = a * K((x - c) / s) + b
 
     where:
 
         K : transition kernel
         c : center location
-        w : transition width
-        a : output scale
+        s : kernel input scaling factor
+        a : amplitude
         b : output offset
 
     This class separates the mathematical shape of an activation
@@ -29,8 +29,8 @@ class ParameterizedActivation(Activation):
         self,
         kernel: TransitionKernel,
         center: float = 0.0,
-        width: float = 1.0,
-        scale: float = 1.0,
+        kernel_scale: float = 1.0,
+        amplitude: float = 1.0,
         bias: float = 0.0,
     ):
         """
@@ -42,25 +42,32 @@ class ParameterizedActivation(Activation):
             Mathematical kernel defining the activation shape.
 
         center : float
-            Location of the activation transition.
+            c in activation function.
+            Controls the horizontal location of the activation
+            transition.
 
-        width : float
-            Controls transition sharpness.
+        kernel_scale : float
+            s in activation function.
+            Controls horizontal scaling of the kernel input.
+            Larger values produce broader, smoother transitions;
+            smaller values produce sharper transitions.
 
-        scale : float
-            Output scaling factor.
+        amplitude : float
+            a in activation function.
+            Controls vertical scaling of the activation output.
 
         bias : float
-            Output offset.
+            b in activation function.
+            Controls vertical offset of the activation output.
         """
 
-        if width <= 0:
-            raise ValueError("Activation width must be positive.")
+        if kernel_scale <= 0:
+            raise ValueError("Activation kernel_scale must be positive.")
 
         self.kernel = kernel
         self.center = center
-        self.width = width
-        self.scale = scale
+        self.kernel_scale = kernel_scale
+        self.amplitude = amplitude
         self.bias = bias
 
     def forward(self, x: np.ndarray) -> np.ndarray:
@@ -78,9 +85,9 @@ class ParameterizedActivation(Activation):
             Activated output values.
         """
 
-        z = (x - self.center) / self.width
+        z = (x - self.center) / self.kernel_scale
 
-        return self.scale * self.kernel.forward(z) + self.bias
+        return self.amplitude * self.kernel.forward(z) + self.bias
 
     def derivative(self, x: np.ndarray) -> np.ndarray:
         """
@@ -97,10 +104,10 @@ class ParameterizedActivation(Activation):
             Derivative values.
         """
 
-        z = (x - self.center) / self.width
+        z = (x - self.center) / self.kernel_scale
 
         return (
-            self.scale
+            self.amplitude
             * self.kernel.derivative(z)
-            / self.width
+            / self.kernel_scale
         )

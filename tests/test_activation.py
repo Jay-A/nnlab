@@ -110,21 +110,21 @@ def test_parameterized_activation_parameters():
     )
 
 
-def test_parameterized_activation_width():
+def test_parameterized_activation_kernel_scale():
     """
-    Verify width changes activation sharpness.
+    Verify kernel_scale changes activation sharpness.
     """
 
     x = np.array([1.0])
 
     narrow = ParameterizedActivation(
         kernel=LogisticKernel(),
-        width=0.1,
+        kernel_scale=0.1,
     )
 
     wide = ParameterizedActivation(
         kernel=LogisticKernel(),
-        width=10.0,
+        kernel_scale=10.0,
     )
 
     assert not np.isclose(
@@ -150,15 +150,15 @@ def test_parameterized_activation_derivative():
     assert np.all(np.isfinite(dy))
 
 
-def test_parameterized_activation_rejects_invalid_width():
+def test_parameterized_activation_rejects_invalid_kernel_scale():
     """
-    Verify activation width must be positive.
+    Verify activation kernel_scale must be positive.
     """
 
     with pytest.raises(ValueError):
         ParameterizedActivation(
             kernel=LogisticKernel(),
-            width=0.0,
+            kernel_scale=0.0,
         )    
 
 
@@ -175,7 +175,7 @@ def test_parameterized_activation_scale_bias():
 
     transformed = ParameterizedActivation(
         kernel=LogisticKernel(),
-        scale=2.0,
+        amplitude=2.0,
         bias=1.0,
     )
 

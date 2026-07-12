@@ -32,6 +32,11 @@ class ActivationLayer(Layer):
 
         self.activation = activation
 
+        # Cached input from forward pass.
+        # Required for computing the activation derivative
+        # during the backward pass.
+        self.input = None
+
     def forward(
         self,
         x: np.ndarray,
@@ -50,4 +55,38 @@ class ActivationLayer(Layer):
             Transformed output values.
         """
 
+        self.input = x
+
         return self.activation.forward(x)
+
+    def backward(
+        self,
+        gradient: np.ndarray,
+    ) -> np.ndarray:
+        """
+        Compute gradient through activation function.
+
+        Uses the chain rule:
+
+            dL/dx = dL/dy * dy/dx
+
+        where:
+
+            dL/dy is the incoming gradient
+            dy/dx is the activation derivative
+
+        Parameters
+        ----------
+        gradient : np.ndarray
+            Gradient of loss with respect to layer output.
+
+        Returns
+        -------
+        np.ndarray
+            Gradient of loss with respect to layer input.
+        """
+
+        return (
+            gradient
+            * self.activation.derivative(self.input)
+        )

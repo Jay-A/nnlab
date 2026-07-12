@@ -85,6 +85,109 @@ def test_dense_forward_values():
     )
 
 
+def test_dense_backward_shapes():
+    """
+    Verify dense backward pass preserves expected shapes.
+    """
+
+    layer = Dense(
+        input_size=3,
+        output_size=2,
+    )
+
+    x = np.array(
+        [
+            [1.0, 2.0, 3.0],
+            [4.0, 5.0, 6.0],
+        ]
+    )
+
+    output = layer.forward(x)
+
+    gradient = np.ones_like(output)
+
+    input_gradient = layer.backward(
+        gradient,
+    )
+
+    assert input_gradient.shape == x.shape
+
+    assert layer.weight_gradient.shape == (
+        3,
+        2,
+    )
+
+    assert layer.bias_gradient.shape == (
+        2,
+    )
+
+
+def test_dense_backward_values():
+    """
+    Verify dense backward computes parameter gradients.
+    """
+
+    layer = Dense(
+        input_size=2,
+        output_size=1,
+    )
+
+    layer.weights = np.array(
+        [
+            [2.0],
+            [3.0],
+        ]
+    )
+
+    layer.bias = np.array(
+        [1.0],
+    )
+
+    x = np.array(
+        [
+            [1.0, 2.0],
+        ]
+    )
+
+    output = layer.forward(x)
+
+    gradient = np.array(
+        [
+            [1.0],
+        ]
+    )
+
+    input_gradient = layer.backward(
+        gradient,
+    )
+
+    assert np.allclose(
+        layer.weight_gradient,
+        np.array(
+            [
+                [1.0],
+                [2.0],
+            ]
+        ),
+    )
+
+    assert np.allclose(
+        layer.bias_gradient,
+        np.array(
+            [1.0],
+        ),
+    )
+
+    assert np.allclose(
+        input_gradient,
+        np.array(
+            [
+                [2.0, 3.0],
+            ]
+        ),
+    )
+
+
 def test_activation_layer_exists():
     """
     Verify activation layer constructs.
@@ -146,3 +249,32 @@ def test_activation_layer_matches_activation():
         layer.forward(x),
         activation.forward(x),
     )
+
+
+def test_activation_layer_backward_shape():
+    """
+    Verify activation layer backward preserves shape.
+    """
+
+    layer = ActivationLayer(
+        activation=ParameterizedActivation(
+            kernel=LogisticKernel(),
+        )
+    )
+
+    x = np.linspace(
+        -5.0,
+        5.0,
+        100,
+    )
+
+    output = layer.forward(x)
+
+    gradient = np.ones_like(output)
+
+    input_gradient = layer.backward(
+        gradient,
+    )
+
+    assert input_gradient.shape == x.shape
+    assert np.all(np.isfinite(input_gradient))
