@@ -62,3 +62,31 @@ class Model(ABC):
             Gradient of loss with respect to model input.
         """
         pass
+
+    def parameters(
+        self,
+    ) -> list[np.ndarray]:
+        """
+        Return trainable model parameters.
+    
+        Returns
+        -------
+        list[np.ndarray]
+            Collection of trainable parameters.
+        """
+    
+        return []
+
+    def gradients(
+        self,
+    ) -> list[np.ndarray]:
+        """
+        Return model parameter gradients.
+    
+        Returns
+        -------
+        list[np.ndarray]
+            Collection of parameter gradients.
+        """
+    
+        return []

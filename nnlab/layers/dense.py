@@ -128,3 +128,40 @@ class Dense(Layer):
         )
 
         return gradient @ self.weights.T
+
+    def parameters(
+        self,
+    ) -> list[np.ndarray]:
+        """
+        Return trainable parameters.
+    
+        Returns
+        -------
+        list[np.ndarray]
+            Dense layer parameters.
+        """
+    
+        return [
+            self.weights,
+            self.bias,
+        ]
+
+    def gradients(
+        self,
+    ) -> list[np.ndarray]:
+        """
+        Return gradients associated with trainable parameters.
+
+        The returned gradients correspond to the parameters
+        returned by ``parameters()`` in the same order.
+
+        Returns
+        -------
+        list[np.ndarray]
+            Dense layer parameter gradients.
+        """
+
+        return [
+            self.weight_gradient,
+            self.bias_gradient,
+        ]        

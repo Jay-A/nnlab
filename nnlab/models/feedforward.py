@@ -7,17 +7,20 @@ from .base import Model
 class FeedForward(Model):
     """
     Feed-forward neural network model.
-
+    
     A feed-forward model applies a sequence of layers
     in order:
-
+    
         x -> layer1 -> layer2 -> ... -> output
-
+    
     During the backward pass, gradients are propagated
     through the same layers in reverse order:
-
+    
         gradient -> layerN -> ... -> layer2 -> layer1
-
+    
+    The model also exposes trainable parameters owned
+    by its constituent layers for use by optimizers.
+    
     Parameters
     ----------
     layers : list[Layer]
@@ -89,3 +92,48 @@ class FeedForward(Model):
             )
 
         return gradient
+
+    def parameters(
+        self,
+    ) -> list[np.ndarray]:
+        """
+        Return trainable parameters from all layers.
+
+        Parameters are collected from each layer in model order.
+        Layers without trainable parameters contribute an empty list.
+
+        Returns
+        -------
+        list[np.ndarray]
+            Collection of trainable model parameters.
+        """
+
+        parameters = []
+
+        for layer in self.layers:
+            parameters.extend(
+                layer.parameters(),
+            )
+
+        return parameters
+
+    def gradients(
+        self,
+    ) -> list[np.ndarray]:
+        """
+        Collect parameter gradients from all layers.
+    
+        Returns
+        -------
+        list[np.ndarray]
+            Model gradients.
+        """
+    
+        gradients = []
+    
+        for layer in self.layers:
+            gradients.extend(
+                layer.gradients()
+            )
+    
+        return gradients

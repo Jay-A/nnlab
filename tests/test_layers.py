@@ -278,3 +278,108 @@ def test_activation_layer_backward_shape():
 
     assert input_gradient.shape == x.shape
     assert np.all(np.isfinite(input_gradient))
+
+
+def test_dense_parameters():
+    """
+    Verify dense layer exposes trainable parameters.
+    """
+
+    layer = Dense(
+        input_size=3,
+        output_size=2,
+    )
+
+    parameters = layer.parameters()
+
+    assert len(parameters) == 2
+
+    assert parameters[0] is layer.weights
+    assert parameters[1] is layer.bias    
+
+
+def test_activation_layer_has_no_parameters():
+    """
+    Verify activation layers expose no trainable parameters.
+    """
+
+    layer = ActivationLayer(
+        activation=ParameterizedActivation(
+            kernel=LogisticKernel(),
+        )
+    )
+
+    parameters = layer.parameters()
+
+    assert parameters == []
+
+
+def test_activation_layer_backward_values():
+    """
+    Verify activation layer propagates gradients.
+    """
+
+    activation = ParameterizedActivation(
+        kernel=LogisticKernel(),
+    )
+
+    layer = ActivationLayer(
+        activation=activation,
+    )
+
+    x = np.array(
+        [
+            0.0,
+        ]
+    )
+
+    layer.forward(x)
+
+    gradient = np.array(
+        [
+            1.0,
+        ]
+    )
+
+    result = layer.backward(
+        gradient,
+    )
+
+    expected = activation.derivative(x)
+
+    assert np.allclose(
+        result,
+        expected,
+    )    
+
+
+def test_dense_parameters():
+    """
+    Verify dense exposes trainable parameters.
+    """
+
+    layer = Dense(
+        input_size=2,
+        output_size=1,
+    )
+
+    parameters = layer.parameters()
+
+    assert len(parameters) == 2
+    assert parameters[0].shape == (2, 1)
+    assert parameters[1].shape == (1,)
+
+
+def test_activation_layer_has_no_parameters():
+    """
+    Verify activation layers are non-trainable.
+    """
+
+    layer = ActivationLayer(
+        activation=ParameterizedActivation(
+            kernel=LogisticKernel(),
+        )
+    )
+
+    assert layer.parameters() == []
+    assert layer.gradients() == []    
