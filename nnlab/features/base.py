@@ -37,3 +37,22 @@ class FeatureExtractor(ABC):
             Extracted feature representation.
         """
         pass
+
+    @property
+    def output_shape(
+        self,
+    ) -> tuple[int, ...] | None:
+        """
+        Shape of the feature representation produced.
+
+        Returns
+        -------
+        tuple[int, ...] | None
+            Expected output shape of transformed features.
+
+            Returns None when the output shape depends on the
+            input data or cannot be determined before transformation.
+        """
+
+        return None
+        

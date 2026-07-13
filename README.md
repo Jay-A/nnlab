@@ -9,18 +9,18 @@
 ## Overview
 
 So many conversations about Machine Learning (ML), and Neural Networks (NN) in
-general, quickly become focused on the idea of the "AI black box" — systems
-that appear almost magical because of the complexity hidden inside them.
+general, quickly become focused on the idea of the "AI black box." They are 
+systems that appear almost magical because of the perceived complexity hidden inside them.
 
-That perspective misses something important: while we may not be able to
-analytically describe every internal behavior of a modern neural network, we
-can still study how these systems work by understanding and isolating their
-individual components.
+That perspective misses something important. While we may not be able to analytically 
+characterize every internal behavior of a modern neural network, we can still study 
+how these systems work by understanding and isolating their individual components.
 
-`nnlab` is built around the idea that neural networks are not mysterious
-monolithic systems, but collections of interacting parts. By separating and
-experimenting with those parts, we can observe how small changes in one
-component influence the behavior of the complete learning system.
+`nnlab` is built around the idea that neural networks are not mysterious monolithic systems, 
+but collections of interacting components. By isolating and experimenting with those 
+components, we can observe how small changes in one part influence the behavior of the 
+entire learning system. The real complexity lies not in the individual components themselves,
+but in how rapidly the parameter space and the interactions between those components grow.
 
 The goal of this project is not to compete with large-scale machine learning
 frameworks or optimize only for benchmark performance. Instead, `nnlab`
