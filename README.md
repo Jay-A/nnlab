@@ -2,6 +2,8 @@
 
 ## Neural Network Lab for Experimental Learning Systems
 
+[Documentation](https://jay-a.github.io/nnlab/) | [Source Code](https://github.com/Jay-A/nnlab)
+
 ---
 
 ## Overview

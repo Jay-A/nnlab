@@ -3,6 +3,13 @@ nnlab
 
 Neural Network Lab for Experimental Learning Systems
 
+Repository
+----------
+
+The source code, experiments, and development history are available on GitHub:
+
+`nnlab GitHub Repository <https://github.com/Jay-A/nnlab>`_
+
 
 Overview
 --------
