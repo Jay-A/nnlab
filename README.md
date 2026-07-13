@@ -32,20 +32,22 @@ The framework focuses on studying the relationships between:
 - activation function behavior,
 - optimization strategies,
 - data representation,
+- feature extraction,
 - and learning outcomes.
 
 By making these components easier to isolate and modify, `nnlab` aims to make
 neural network experimentation more transparent, reproducible, and accessible.
 
-The initial focus is on function approximation and regression problems, with
-future extensions toward classification, convolutional models, recurrent
-architectures, and other neural network approaches.
+The project begins with fundamental feed-forward neural networks and extends
+toward broader learning systems including classification problems, sensor
+applications, audio analysis, and future convolutional and recurrent models.
 
 ---
 
 ## Motivation
 
 Many machine learning frameworks are designed around a workflow like:
+
 ```text
 define model → train model → evaluate performance
 ```
@@ -55,6 +57,7 @@ can make it difficult to explore the underlying behavior of the individual
 components that make those systems work.
 
 `nnlab` takes a more experimental approach:
+
 ```text
 define component → modify behavior → observe effects → understand interactions
 ```
@@ -68,19 +71,22 @@ Questions that motivate the project include:
 - How do different parameterizations affect optimization?
 - How do architectural choices change representation and generalization?
 - How do optimization strategies interact with the structure of a model?
+- How can learned representations be applied to real sensor and signal data?
 
 Rather than treating neural networks only as tools for producing predictions,
 `nnlab` treats them as objects of study.
 
-The goal is to provide a framework where experiments are small enough to
-understand, controlled enough to reproduce, and flexible enough to reveal how
-the pieces of a learning system influence one another.
+The goal is to provide a framework where neural networks can be explored
+through experiments that are small enough to understand, controlled enough to
+reproduce, and flexible enough to reveal how the pieces of a learning system
+influence one another.
 
 ---
 
 ## Project Goals
 
-`nnlab` is designed around the idea of a **computational lab.oratory** for neural networks.
+`nnlab` is designed around the idea of a **computational lab.oratory** for
+neural networks.
 
 Key goals:
 
@@ -90,6 +96,112 @@ Key goals:
 - Provide clear visualizations of training dynamics.
 - Support reproducible computational experiments.
 - Maintain a modular architecture suitable for future extensions.
+- Provide a foundation for experimenting with real-world signal and sensor
+  applications.
+
+---
+
+## Current Architecture
+
+`nnlab` is organized around independent components that can be combined into
+complete learning systems.
+
+Current components include:
+
+### Layers
+
+Neural network computation is represented through modular layers.
+
+Current implementations include:
+
+- Fully connected dense layers.
+- Activation layers.
+- Forward propagation.
+- Backward propagation.
+- Parameter and gradient tracking.
+
+Layers expose a consistent interface:
+
+```text
+input
+  ↓
+forward()
+  ↓
+output
+
+gradient
+  ↓
+backward()
+  ↓
+previous layer gradient
+```
+
+This allows models to be constructed as reusable computational graphs.
+
+---
+
+### Models
+
+Current model support includes feed-forward networks.
+
+Example:
+
+```text
+input
+ ↓
+dense layer
+ ↓
+activation
+ ↓
+dense layer
+ ↓
+prediction
+```
+
+Models coordinate:
+
+- forward evaluation,
+- backward propagation,
+- parameter collection.
+
+---
+
+### Optimizers
+
+`nnlab` includes optimization components responsible for updating trainable
+parameters.
+
+Current optimizer support includes:
+
+- Stochastic Gradient Descent (SGD)
+
+The separation between gradients and optimization allows experiments with
+different learning strategies without modifying the underlying model.
+
+---
+
+### Training
+
+Training utilities provide the connection between:
+
+```text
+data
+ ↓
+model
+ ↓
+loss
+ ↓
+backward pass
+ ↓
+optimizer
+```
+
+This supports repeatable experiments involving:
+
+- epochs,
+- loss tracking,
+- parameter updates,
+- training history visualization.
 
 ---
 
@@ -105,14 +217,14 @@ parameters.
 A parameterized activation is defined as:
 
 $$
-\phi(x)=aK\left(\frac{x-c}{w}\right)+b
+\phi(x)=aK\left(\frac{x-c}{s}\right)+b
 $$
 
 where:
 
 - \(K\) is a transition kernel defining the underlying mathematical shape,
 - \(c\) controls the activation center,
-- \(w\) controls the transition width,
+- \(s\) controls the transition scale,
 - \(a\) controls output scaling,
 - \(b\) controls output offset.
 
@@ -146,20 +258,95 @@ effects, and learning dynamics.
 
 ---
 
+## Feature Representation
+
+Modern learning systems often depend on transforming raw observations into
+useful numerical representations.
+
+`nnlab` is beginning to explore feature extraction as a separate component from
+the neural network itself.
+
+The intended workflow is:
+
+```text
+raw signal
+    ↓
+feature extraction
+    ↓
+neural network
+    ↓
+prediction
+```
+
+Potential applications include:
+
+- sensor telemetry,
+- audio signals,
+- industrial monitoring,
+- autonomous systems.
+
+This separation keeps feature engineering independent from model architecture
+and allows different representations to be compared experimentally.
+
+---
+
+## Experimental Applications
+
+Current experiments explore the progression:
+
+```text
+single neuron
+      ↓
+feed-forward networks
+      ↓
+activation kernel comparison
+      ↓
+architecture exploration
+      ↓
+optimization studies
+      ↓
+sensor-based applications
+```
+
+Example applications include:
+
+### Drone Sensor Health Monitoring
+
+Exploring how neural networks can learn relationships between telemetry signals
+such as:
+
+- vibration,
+- temperature,
+- battery state,
+- system measurements.
+
+### Audio Event Recognition
+
+Exploring how signal representations can be transformed into features suitable
+for learning tasks such as:
+
+- machine sound analysis,
+- anomaly detection,
+- event classification.
+
+---
+
 ## Planned Features
 
 ### Models
 
 - Feed-forward neural networks
+- Classification models
 - Convolutional neural networks
 - Recurrent architectures
-- Future experimental architectures
+- Additional experimental architectures
 
 ### Problems
 
 - Function regression
 - Classification
-- Data-driven modeling problems
+- Signal analysis
+- Sensor-based modeling
 - Scientific computing applications
 
 ### Experiments
@@ -169,6 +356,7 @@ effects, and learning dynamics.
 - Optimization experiments
 - Learning curve analysis
 - Parameter sensitivity studies
+- Representation comparisons
 
 ### Visualization
 
@@ -180,6 +368,7 @@ Planned visualizations include:
 - Activation function shapes
 - Network architecture diagrams
 - Experiment comparisons
+- Sensor and signal analysis plots
 
 ---
 
@@ -191,13 +380,14 @@ Documentation will be hosted through GitHub Pages:
 
 The documentation will include:
 
-- Getting started guides
-- API documentation
-- Mathematical background
-- Experiment descriptions
-- Automatically generated figures and examples
+- Getting started guides,
+- API documentation,
+- Mathematical background,
+- Experiment descriptions,
+- Automatically generated figures and examples.
 
-Documentation will be built using Sphinx, with support for automated generation of experimental results and visualizations.
+Documentation will be built using Sphinx, with support for automated
+generation of experimental results and visualizations.
 
 ---
 

@@ -1,0 +1,39 @@
+from abc import ABC, abstractmethod
+
+import numpy as np
+
+
+class FeatureExtractor(ABC):
+    """
+    Abstract base class for feature extraction.
+
+    Feature extractors transform raw input data into numerical
+    representations suitable for machine learning models.
+
+    Feature extraction is performed before model evaluation:
+
+        raw input -> feature representation -> neural network
+
+    Feature extractors do not perform learning or parameter updates.
+    They provide deterministic transformations of input data.
+    """
+
+    @abstractmethod
+    def transform(
+        self,
+        x: np.ndarray,
+    ) -> np.ndarray:
+        """
+        Transform raw input data into features.
+
+        Parameters
+        ----------
+        x : np.ndarray
+            Raw input data.
+
+        Returns
+        -------
+        np.ndarray
+            Extracted feature representation.
+        """
+        pass

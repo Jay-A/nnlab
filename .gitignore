@@ -68,6 +68,9 @@ docs/doxygen/latex/
 # Generated experiment output
 # ============================================================
 
+# Documentation builds
+docs/build/
+
 # Experiment results
 results/
 experiments/output/
