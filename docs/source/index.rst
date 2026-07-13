@@ -8,7 +8,9 @@ Repository
 
 The source code, experiments, and development history are available on GitHub:
 
-`nnlab GitHub Repository <https://github.com/Jay-A/nnlab>`_
+.. image:: https://img.shields.io/badge/GitHub-nnlab-blue?logo=github
+   :target: https://github.com/Jay-A/nnlab
+   :alt: nnlab GitHub Repository
 
 
 Overview
