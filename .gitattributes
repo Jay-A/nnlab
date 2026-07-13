@@ -1,0 +1,5 @@
+# Do not count notebooks as the primary project language
+*.ipynb linguist-detectable=false
+
+# Keep Python source visible
+*.py linguist-detectable=true
