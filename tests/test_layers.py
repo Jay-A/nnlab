@@ -4,6 +4,7 @@ import pytest
 from nnlab.activations import ParameterizedActivation
 from nnlab.kernels import LogisticKernel
 from nnlab.layers import ActivationLayer, Dense, Layer
+from nnlab.initializers import Initializer
 
 
 def test_layer_base_is_abstract():
@@ -383,3 +384,103 @@ def test_activation_layer_has_no_parameters():
 
     assert layer.parameters() == []
     assert layer.gradients() == []    
+
+
+def test_dense_default_initializer():
+    """
+    Verify dense uses a default initializer when none is provided.
+    """
+
+    layer = Dense(
+        input_size=4,
+        output_size=3,
+    )
+
+    assert layer.weights.shape == (
+        4,
+        3,
+    )
+
+    assert np.all(np.isfinite(layer.weights))    
+
+
+class ZeroInitializer(Initializer):
+    """
+    Test initializer that returns zeros.
+    """
+
+    def initialize(
+        self,
+        shape: tuple[int, ...],
+        fan_in: int,
+        fan_out: int,
+    ) -> np.ndarray:
+
+        return np.zeros(
+            shape,
+        )
+
+
+def test_dense_custom_initializer():
+    """
+    Verify dense accepts custom initializers.
+    """
+
+    layer = Dense(
+        input_size=2,
+        output_size=3,
+        initializer=ZeroInitializer(),
+    )
+
+    assert np.allclose(
+        layer.weights,
+        np.zeros(
+            (2, 3),
+        ),
+    )    
+
+
+class RecordingInitializer(Initializer):
+    """
+    Test initializer that records initialization metadata.
+    """
+
+    def __init__(self):
+        self.shape = None
+        self.fan_in = None
+        self.fan_out = None
+
+    def initialize(
+        self,
+        shape: tuple[int, ...],
+        fan_in: int,
+        fan_out: int,
+    ) -> np.ndarray:
+
+        self.shape = shape
+        self.fan_in = fan_in
+        self.fan_out = fan_out
+
+        return np.zeros(shape)
+
+
+def test_dense_passes_initializer_shape_information():
+    """
+    Verify dense passes correct shape information.
+    """
+
+    initializer = RecordingInitializer()
+
+    Dense(
+        input_size=5,
+        output_size=7,
+        initializer=initializer,
+    )
+
+    assert initializer.shape == (
+        5,
+        7,
+    )
+
+    assert initializer.fan_in == 5
+    assert initializer.fan_out == 7    

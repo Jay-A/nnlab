@@ -3,6 +3,12 @@ import numpy as np
 from .base import Layer
 
 
+import numpy as np
+
+from ..initializers import HeNormal
+from .base import Layer
+
+
 class Dense(Layer):
     """
     Fully connected linear layer.
@@ -21,12 +27,17 @@ class Dense(Layer):
 
     output_size : int
         Number of output features.
+
+    initializer : Initializer, optional
+        Parameter initialization strategy used for weights.
+        Defaults to HeNormal.
     """
 
     def __init__(
         self,
         input_size: int,
         output_size: int,
+        initializer=None,
     ):
         """
         Initialize dense layer parameters.
@@ -38,26 +49,34 @@ class Dense(Layer):
 
         output_size : int
             Number of output features.
+
+        initializer : Initializer, optional
+            Weight initialization strategy.
         """
 
         self.input_size = input_size
         self.output_size = output_size
 
-        self.weights = np.random.randn(
-            input_size,
-            output_size,
-        ) * np.sqrt(2.0 / input_size)
+        if initializer is None:
+            initializer = HeNormal()
+
+        self.initializer = initializer
+
+        self.weights = self.initializer.initialize(
+            shape=(
+                input_size,
+                output_size,
+            ),
+            fan_in=input_size,
+            fan_out=output_size,
+        )
 
         self.bias = np.zeros(
             output_size,
         )
 
-        # Cached input from forward pass.
-        # Required to compute parameter gradients.
         self.input = None
 
-        # Gradients computed during backward pass.
-        # These will later be consumed by optimizers.
         self.weight_gradient = None
         self.bias_gradient = None
 
